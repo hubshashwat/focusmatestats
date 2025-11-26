@@ -23,6 +23,7 @@
             overflow: hidden;
         }
 
+        /* Scrollbar styling */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -53,6 +54,7 @@
             border-bottom: 1px solid #fff;
         }
 
+        /* Login & Loading Screens */
         #login-screen,
         #loading-screen {
             position: fixed;
@@ -60,6 +62,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            height: 100dvh; /* Mobile fix */
             background: #00050a;
             z-index: 2000;
             display: flex;
@@ -130,10 +133,12 @@
             margin-top: 15px;
         }
 
+        /* Main App Container */
         #app-container {
             display: none;
             width: 100vw;
             height: 100vh;
+            height: 100dvh; /* Mobile fix for address bars */
             flex-direction: column;
         }
 
@@ -199,6 +204,8 @@
 
         #sessions-tab {
             padding: 20px;
+            /* Extra padding at bottom to ensure last chart clears mobile UI */
+            padding-bottom: 80px; 
         }
 
         .charts-grid {
@@ -241,6 +248,7 @@
             justify-content: center;
             align-items: center;
             padding: 30px;
+            padding-bottom: 80px; /* Mobile fix */
         }
 
         .heatmap-container,
@@ -374,9 +382,11 @@
             color: #a0e0ff;
         }
 
+        /* Responsive Breakpoints */
         @media (max-width: 1200px) {
             #sessions-tab {
                 padding: 15px;
+                padding-bottom: 80px; /* Safe area for scrolling */
             }
 
             .charts-grid {
@@ -397,6 +407,8 @@
         @media (max-width: 600px) {
             #sessions-tab {
                 padding: 10px;
+                /* Crucial Fix: Add large bottom padding so the last chart isn't cut off */
+                padding-bottom: 100px; 
             }
 
             .chart-card {
@@ -426,6 +438,8 @@
             .heatmap-container,
             .stats-panel {
                 padding: 15px;
+                /* Add padding to bottom of other tabs too */
+                margin-bottom: 50px; 
             }
         }
     </style>

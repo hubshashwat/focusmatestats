@@ -21,6 +21,9 @@
             color: #00f0ff;
             font-family: 'Roboto Mono', monospace;
             overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh; /* Mobile fix */
         }
 
         /* Scrollbar styling */
@@ -268,6 +271,8 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
+            height: 100%; /* Ensure full height for iframes */
+            position: relative;
         }
 
         .tab-content.active {
@@ -454,6 +459,52 @@
             color: #a0e0ff;
         }
 
+        /* GLOBE TAB (IFRAME) */
+        #globe-tab {
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .get-yours-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 25, 35, 0.9);
+            border: 1px solid #00f0ff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 50;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .get-yours-overlay p {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+        .get-yours-btn {
+            display: inline-block;
+            background: #00f0ff;
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .get-yours-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
         @media (max-width: 1200px) {
             #sessions-tab {
                 padding: 15px;
@@ -516,6 +567,12 @@
             .heatmap-container,
             .stats-panel {
                 padding: 15px;
+            }
+            
+            .get-yours-overlay {
+                bottom: 100px; /* Push up above tab bar/nav */
+                left: 20px;    /* Center it */
+                right: 20px;
             }
         }
     </style>
@@ -592,6 +649,7 @@
                 <button class="tab-btn active" data-tab="sessions">Sessions</button>
                 <button class="tab-btn" data-tab="heatmap">Consistency</button>
                 <button class="tab-btn" data-tab="partners">Partners</button>
+                <button class="tab-btn" data-tab="globe">Globe</button>
             </div>
         </header>
 
@@ -685,6 +743,16 @@
                 <ul id="top-partners-list" style="max-height: 400px; overflow-y: auto;"></ul>
             </div>
         </div>
+
+        <div id="globe-tab" class="tab-content">
+            <iframe src="https://hubshashwat.github.io/focusmate/"></iframe>
+            
+            <div class="get-yours-overlay">
+                <p>This is a demo visualization of Shashwat's data.</p>
+                <p style="color: #a0e0ff; font-size: 0.8rem; margin-bottom: 15px;">Want your own personal 3D globe with your real data?</p>
+                <a href="https://github.com/hubshashwat/focusmate" target="_blank" class="get-yours-btn">Clone & Run Locally</a>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -723,6 +791,9 @@
 
         ui.btnGenerate.addEventListener('click', startApp);
 
+        // We only need this fetch if your Python map logic relies on it, 
+        // otherwise for THIS view-only dashboard, we don't actually need it.
+        // Leaving it in case you re-add logic that uses it later.
         fetch('https://raw.githubusercontent.com/hubshashwat/focusmate/refs/heads/master/timezone.json')
             .then(r => r.json())
             .then(data => TIMEZONE_MAP = data)
@@ -894,39 +965,50 @@
 
             const totalValidSessions = Object.values(partnerData).reduce((sum, p) => sum + p.count, 0);
 
-            document.getElementById('user-name').textContent = myName;
-            document.getElementById('profile-total-sessions').textContent = totalValidSessions;
-            document.getElementById('profile-total-partners').textContent = Object.keys(partnerData).length;
-            document.getElementById('profile-favorite-sessions').textContent = favoriteSessions;
+            // --- FIXED NULL CHECKS HERE ---
+            const elName = document.getElementById('user-name');
+            if(elName) elName.textContent = myName;
+
+            const elTotal = document.getElementById('profile-total-sessions');
+            if(elTotal) elTotal.textContent = totalValidSessions;
+
+            const elUnique = document.getElementById('profile-total-partners');
+            if(elUnique) elUnique.textContent = Object.keys(partnerData).length;
+
+            const elFav = document.getElementById('profile-favorite-sessions');
+            if(elFav) elFav.textContent = favoriteSessions;
 
             const partnersList = document.getElementById('top-partners-list');
-            partnersList.innerHTML = '<li style="padding: 20px; text-align: center; color: #a0e0ff;">Loading top partners...</li>';
+            // Ensure list exists before writing
+            if(partnersList) {
+                partnersList.innerHTML = '<li style="padding: 20px; text-align: center; color: #a0e0ff;">Loading top partners...</li>';
 
-            if (sortedPartners.length > 0) {
-                try {
-                    const partnerPromises = sortedPartners.map(async (partner, index) => {
-                        const response = await fetch(`https://api.focusmate.com/v1/users/${partner.userId}`, {
-                            headers: { 'X-API-KEY': apiKey }
+                if (sortedPartners.length > 0) {
+                    try {
+                        const partnerPromises = sortedPartners.map(async (partner, index) => {
+                            const response = await fetch(`https://api.focusmate.com/v1/users/${partner.userId}`, {
+                                headers: { 'X-API-KEY': apiKey }
+                            });
+                            if (response.ok) {
+                                const userData = await response.json();
+                                const partnerName = userData.user?.name || 'Unknown';
+                                const rankColors = ['#00f0ff', '#a0e0ff', '#80d0ff'];
+                                const rankColor = rankColors[index] || '#a0e0ff';
+                                return `<li style="padding: 12px 0; border-bottom: 1px solid rgba(0, 240, 255, 0.1);">
+                                        <span style="color: ${rankColor};"><strong style="font-size: 1.1rem;">#${index + 1}</strong> ${partnerName} ⭐</span>
+                                        <strong style="color: #fff;">${partner.count}</strong>
+                                    </li>`;
+                            }
+                            return '';
                         });
-                        if (response.ok) {
-                            const userData = await response.json();
-                            const partnerName = userData.user?.name || 'Unknown';
-                            const rankColors = ['#00f0ff', '#a0e0ff', '#80d0ff'];
-                            const rankColor = rankColors[index] || '#a0e0ff';
-                            return `<li style="padding: 12px 0; border-bottom: 1px solid rgba(0, 240, 255, 0.1);">
-                                    <span style="color: ${rankColor};"><strong style="font-size: 1.1rem;">#${index + 1}</strong> ${partnerName} ⭐</span>
-                                    <strong style="color: #fff;">${partner.count}</strong>
-                                </li>`;
-                        }
-                        return '';
-                    });
-                    const partnerHTMLs = await Promise.all(partnerPromises);
-                    partnersList.innerHTML = partnerHTMLs.filter(html => html).join('');
-                } catch (err) {
-                    console.error("Error rendering partners:", err);
+                        const partnerHTMLs = await Promise.all(partnerPromises);
+                        partnersList.innerHTML = partnerHTMLs.filter(html => html).join('');
+                    } catch (err) {
+                        console.error("Error rendering partners:", err);
+                    }
+                } else {
+                    partnersList.innerHTML = '<li style="padding: 20px; text-align: center; color: #a0e0ff;">No favorite partners found.</li>';
                 }
-            } else {
-                partnersList.innerHTML = '<li style="padding: 20px; text-align: center; color: #a0e0ff;">No favorite partners found.</li>';
             }
         }
 
@@ -939,7 +1021,6 @@
             let checkDate = new Date();
             let dateStr = checkDate.toISOString().split('T')[0];
 
-            // If no session today, check yesterday
             if (!dailyCounts[dateStr]) {
                 checkDate.setDate(checkDate.getDate() - 1);
                 dateStr = checkDate.toISOString().split('T')[0];
@@ -1036,7 +1117,6 @@
         }
 
         function renderCharts(data) {
-            // Set global chart defaults for dark theme visibility
             Chart.defaults.color = '#a0e0ff';
             Chart.defaults.borderColor = 'rgba(0, 240, 255, 0.1)';
 

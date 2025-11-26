@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focusmate Analytics</title>
+    <title>Focusmate Analytics - Private & Secure</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
@@ -47,6 +47,7 @@
             text-decoration: none;
             border-bottom: 1px dotted #00f0ff;
             transition: 0.2s;
+            cursor: pointer;
         }
 
         a:hover {
@@ -84,11 +85,31 @@
             box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
             max-width: 400px;
             width: 90%;
+            position: relative;
         }
 
         .login-box h1 {
             margin-top: 0;
             text-shadow: 0 0 10px #00f0ff;
+            margin-bottom: 5px;
+        }
+
+        /* PRIVACY BADGE STYLE */
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid #00f0ff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
         }
 
         .login-box p {
@@ -131,6 +152,58 @@
             font-size: 0.75rem;
             color: #666;
             margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* MODAL STYLES */
+        #privacy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #00151f;
+            border: 1px solid #00f0ff;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #00f0ff;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .privacy-list li {
+            margin-bottom: 10px;
+            color: #a0e0ff;
+            border-bottom: 1px solid rgba(0,240,255,0.1);
+            padding-bottom: 10px;
+            display: block; /* Override flex */
+        }
+        
+        .privacy-list strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 4px;
         }
 
         /* Main App Container */
@@ -138,7 +211,7 @@
             display: none;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Mobile fix */
+            height: 100dvh;
             flex-direction: column;
         }
 
@@ -244,8 +317,8 @@
 
         #heatmap-tab,
         #partners-tab {
-            justify-content: center; /* Desktop: Center vertically */
-            align-items: center;     /* Desktop: Center horizontally */
+            justify-content: center;
+            align-items: center;
             padding: 30px;
             padding-bottom: 80px;
         }
@@ -381,7 +454,6 @@
             color: #a0e0ff;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 1200px) {
             #sessions-tab {
                 padding: 15px;
@@ -432,23 +504,18 @@
             .consistency-stats-grid {
                 grid-template-columns: 1fr;
             }
-
-            /* --- FIXED SECTION --- */
-            /* On mobile, align to top (flex-start) so long content scrolls properly. */
-            /* "center" was cutting off the top part of the stats */
+            
             #heatmap-tab,
             #partners-tab {
-                justify-content: flex-start;
+                justify-content: flex-start; /* Align top on mobile */
                 align-items: stretch;
                 padding: 15px;
                 padding-bottom: 100px;
             }
-            /* --------------------- */
 
             .heatmap-container,
             .stats-panel {
                 padding: 15px;
-                margin-bottom: 20px;
             }
         }
     </style>
@@ -458,15 +525,55 @@
     <div id="login-screen">
         <div class="login-box">
             <h1>Focusmate Analytics</h1>
-            <p>Analyze your productivity patterns</p>
-            <p style="color: #a0e0ff; font-size: 0.85rem; margin-bottom: 15px;">📊 Shows data from the <strong>last 12
-                    months</strong></p>
+            
+            <div class="privacy-badge">
+                <span>🔒 100% Private & Client-Side</span>
+            </div>
+
+            <p>Analyze your productivity patterns from the last 12 months.</p>
+            
             <input type="password" id="api-key-input" placeholder="Paste your Focusmate API Key here">
             <button class="primary-btn" id="btn-generate">LOAD DATA</button>
+            
             <div class="disclaimer">
-                <p>Your key is processed <strong>locally in your browser</strong>.</p>
-                <p>It is never stored or sent to any server.</p>
-                <a href="https://app.focusmate.com/settings?type=account" target="_blank">Get your key here</a>
+                <p>Your API key is processed <strong>locally in your browser</strong>.</p>
+                <p>No data is ever sent to our servers.</p>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,240,255,0.2);">
+                    <a href="https://app.focusmate.com/settings?type=account" target="_blank">Get Key</a>
+                    <span style="margin: 0 10px; color: #666;">|</span>
+                    <a id="open-privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="privacy-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-privacy">&times;</button>
+            <h2 style="color: #00f0ff; margin-bottom: 20px;">Your Data is Private</h2>
+            <p style="color: #fff; margin-bottom: 20px;">We believe your productivity data belongs to you. Here is how we guarantee your privacy:</p>
+            
+            <ul class="privacy-list">
+                <li>
+                    <strong>Client-Side Only Execution</strong>
+                    This application runs entirely inside your web browser. No code runs on a backend server.
+                </li>
+                <li>
+                    <strong>Direct Connection</strong>
+                    When you enter your API key, your browser connects <em>directly</em> to <code>api.focusmate.com</code>. There is no middleman server.
+                </li>
+                <li>
+                    <strong>Zero Data Retention</strong>
+                    We do not have a database. Once you close this tab, your API key and session data are wiped from memory.
+                </li>
+                <li>
+                    <strong>Open Source</strong>
+                    The code for this tool is public. You can verify exactly what it does.
+                </li>
+            </ul>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="https://github.com/hubshashwat/focusmatestats" target="_blank" style="font-weight: bold; font-size: 1.1rem;">View Source Code on GitHub</a>
             </div>
         </div>
     </div>
@@ -591,8 +698,18 @@
             appContainer: document.getElementById('app-container'),
             input: document.getElementById('api-key-input'),
             btnGenerate: document.getElementById('btn-generate'),
-            loadingText: document.getElementById('loading-text')
+            loadingText: document.getElementById('loading-text'),
+            privacyModal: document.getElementById('privacy-modal'),
+            openPrivacy: document.getElementById('open-privacy'),
+            closePrivacy: document.getElementById('close-privacy')
         };
+
+        // Privacy Modal Logic
+        ui.openPrivacy.addEventListener('click', () => ui.privacyModal.style.display = 'flex');
+        ui.closePrivacy.addEventListener('click', () => ui.privacyModal.style.display = 'none');
+        ui.privacyModal.addEventListener('click', (e) => {
+            if (e.target === ui.privacyModal) ui.privacyModal.style.display = 'none';
+        });
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {

@@ -138,7 +138,7 @@
             display: none;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Mobile fix for address bars */
+            height: 100dvh; /* Mobile fix */
             flex-direction: column;
         }
 
@@ -204,7 +204,6 @@
 
         #sessions-tab {
             padding: 20px;
-            /* Extra padding at bottom to ensure last chart clears mobile UI */
             padding-bottom: 80px; 
         }
 
@@ -245,10 +244,10 @@
 
         #heatmap-tab,
         #partners-tab {
-            justify-content: center;
-            align-items: center;
+            justify-content: center; /* Desktop: Center vertically */
+            align-items: center;     /* Desktop: Center horizontally */
             padding: 30px;
-            padding-bottom: 80px; /* Mobile fix */
+            padding-bottom: 80px;
         }
 
         .heatmap-container,
@@ -386,7 +385,7 @@
         @media (max-width: 1200px) {
             #sessions-tab {
                 padding: 15px;
-                padding-bottom: 80px; /* Safe area for scrolling */
+                padding-bottom: 80px;
             }
 
             .charts-grid {
@@ -407,8 +406,7 @@
         @media (max-width: 600px) {
             #sessions-tab {
                 padding: 10px;
-                /* Crucial Fix: Add large bottom padding so the last chart isn't cut off */
-                padding-bottom: 100px; 
+                padding-bottom: 100px;
             }
 
             .chart-card {
@@ -435,11 +433,22 @@
                 grid-template-columns: 1fr;
             }
 
+            /* --- FIXED SECTION --- */
+            /* On mobile, align to top (flex-start) so long content scrolls properly. */
+            /* "center" was cutting off the top part of the stats */
+            #heatmap-tab,
+            #partners-tab {
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 15px;
+                padding-bottom: 100px;
+            }
+            /* --------------------- */
+
             .heatmap-container,
             .stats-panel {
                 padding: 15px;
-                /* Add padding to bottom of other tabs too */
-                margin-bottom: 50px; 
+                margin-bottom: 20px;
             }
         }
     </style>

@@ -575,6 +575,33 @@
                 right: 20px;
             }
         }
+
+        /* FOOTER STYLES */
+        .app-footer {
+            background: rgba(0, 25, 35, 0.9);
+            border-top: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #666;
+            flex-shrink: 0; /* Prevents it from being squashed */
+            z-index: 100;
+        }
+
+        .app-footer a {
+            color: #a0e0ff;
+            margin: 0 5px;
+        }
+
+        .app-footer a:hover {
+            color: #00f0ff;
+            text-shadow: 0 0 5px #00f0ff;
+        }
+
+        .separator {
+            margin: 0 5px;
+            color: #333;
+        }
     </style>
 </head>
 
@@ -600,6 +627,13 @@
                     <span style="margin: 0 10px; color: #666;">|</span>
                     <a id="open-privacy">Privacy Policy</a>
                 </div>
+                
+                <div style="margin-top: 15px; font-size: 0.7rem; color:rgb(246, 5, 33);">
+                    Built by <a href="https://github.com/hubshashwat" target="_blank" style="color:rgb(246, 5, 33);">Shashwat</a> 
+                    &bull; 
+                    <a href="mailto:send2shashwat@gmail.com" style="color:rgb(246, 5, 33);">Feedback</a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -753,6 +787,13 @@
                 <a href="https://github.com/hubshashwat/focusmate" target="_blank" class="get-yours-btn">Clone & Run Locally</a>
             </div>
         </div>
+
+        <footer class="app-footer">
+            <span>Built by <a href="https://github.com/hubshashwat" target="_blank">Shashwat</a></span>
+            <span class="separator">|</span>
+            <span>Feedback: <a href="mailto:send2shashwat@gmail.com">send2shashwat@gmail.com</a></span>
+        </footer>
+
     </div>
 
     <script>

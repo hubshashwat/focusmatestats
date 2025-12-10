@@ -17,13 +17,51 @@
         }
 
         body {
-            background-color: #000000;
+            background: radial-gradient(ellipse at bottom, #2B32B2 0%, #1488CC 20%, #090A0F 80%);
             color: #00f0ff;
             font-family: 'Roboto Mono', monospace;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Mobile fix */
+            height: 100dvh;
+            /* Mobile fix */
+            position: relative;
+        }
+
+        /* SPACE STARS BACKGROUND */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.6;
+            animation: twinkle 5s infinite;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
 
         /* Scrollbar styling */
@@ -33,7 +71,7 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(0, 240, 255, 0.1);
+            background: rgba(0, 240, 255, 0.05);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -56,6 +94,7 @@
         a:hover {
             color: #fff;
             border-bottom: 1px solid #fff;
+            text-shadow: 0 0 10px #00f0ff;
         }
 
         /* Login & Loading Screens */
@@ -66,8 +105,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Mobile fix */
-            background: #00050a;
+            height: 100dvh;
+            /* Mobile fix */
+            background: transparent;
             z-index: 2000;
             display: flex;
             flex-direction: column;
@@ -83,9 +123,12 @@
         .login-box {
             border: 1px solid rgba(0, 240, 255, 0.3);
             padding: 40px;
-            background: rgba(0, 25, 35, 0.8);
+            background: rgba(0, 25, 35, 0.6);
+            /* Glass effect */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 12px;
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.05);
             max-width: 400px;
             width: 90%;
             position: relative;
@@ -93,8 +136,9 @@
 
         .login-box h1 {
             margin-top: 0;
-            text-shadow: 0 0 10px #00f0ff;
+            text-shadow: 0 0 15px #00f0ff;
             margin-bottom: 5px;
+            font-size: 1.8rem;
         }
 
         /* PRIVACY BADGE STYLE */
@@ -125,11 +169,18 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid #00f0ff;
             color: #fff;
             font-family: 'Roboto Mono', monospace;
             border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            background: rgba(0, 0, 0, 0.5);
         }
 
         button.primary-btn {
@@ -148,12 +199,13 @@
 
         button.primary-btn:hover {
             background: #fff;
-            box-shadow: 0 0 15px #00f0ff;
+            box-shadow: 0 0 20px #00f0ff;
+            transform: translateY(-1px);
         }
 
         .disclaimer {
             font-size: 0.75rem;
-            color: #666;
+            color: #888;
             margin-top: 15px;
             line-height: 1.4;
         }
@@ -166,7 +218,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
             z-index: 3000;
             justify-content: center;
             align-items: center;
@@ -174,7 +227,7 @@
         }
 
         .modal-content {
-            background: #00151f;
+            background: rgba(0, 25, 35, 0.9);
             border: 1px solid #00f0ff;
             padding: 30px;
             max-width: 500px;
@@ -198,11 +251,12 @@
         .privacy-list li {
             margin-bottom: 10px;
             color: #a0e0ff;
-            border-bottom: 1px solid rgba(0,240,255,0.1);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
             padding-bottom: 10px;
-            display: block; /* Override flex */
+            display: block;
+            /* Override flex */
         }
-        
+
         .privacy-list strong {
             color: #fff;
             display: block;
@@ -223,13 +277,17 @@
         }
 
         header {
-            background: rgba(0, 25, 35, 0.9);
+            background: rgba(0, 25, 35, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 240, 255, 0.3);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            position: relative;
+            z-index: 10;
         }
 
         header h1 {
@@ -258,12 +316,14 @@
         .tab-btn:hover {
             border-color: #00f0ff;
             color: #00f0ff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
         }
 
         .tab-btn.active {
             background: #00f0ff;
             color: #000;
-            box-shadow: 0 0 10px #00f0ff;
+            box-shadow: 0 0 15px #00f0ff;
+            border-color: #00f0ff;
         }
 
         .tab-content {
@@ -271,7 +331,8 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            height: 100%; /* Ensure full height for iframes */
+            height: 100%;
+            /* Ensure full height for iframes */
             position: relative;
         }
 
@@ -282,7 +343,7 @@
 
         #sessions-tab {
             padding: 20px;
-            padding-bottom: 80px; 
+            padding-bottom: 80px;
         }
 
         .charts-grid {
@@ -296,12 +357,22 @@
         .chart-card {
             border: 1px solid rgba(0, 240, 255, 0.3);
             padding: 15px;
-            background: rgba(0, 25, 35, 0.8);
+            background: rgba(0, 25, 35, 0.6);
+            /* Glass Effect */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
             min-height: 0;
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .chart-card:hover {
+            border-color: rgba(0, 240, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
         }
 
         .chart-card h3 {
@@ -311,6 +382,7 @@
             border-bottom: 1px solid rgba(0, 240, 255, 0.3);
             padding-bottom: 8px;
             flex-shrink: 0;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
         }
 
         .chart-wrapper {
@@ -332,10 +404,13 @@
         .stats-panel {
             border: 1px solid rgba(0, 240, 255, 0.3);
             padding: 30px;
-            background: rgba(0, 25, 35, 0.8);
+            background: rgba(0, 25, 35, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 8px;
             max-width: 1200px;
             width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .stats-panel {
@@ -350,6 +425,7 @@
             font-size: 1.2rem;
             border-bottom: 1px solid rgba(0, 240, 255, 0.3);
             padding-bottom: 10px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
         }
 
         .heatmap-grid {
@@ -371,24 +447,30 @@
         }
 
         .day-cell:hover {
-            transform: scale(1.3);
+            transform: scale(1.5);
             border: 1px solid #00f0ff;
+            box-shadow: 0 0 10px #00f0ff;
+            z-index: 10;
         }
 
         .day-cell.l1 {
             background: rgba(100, 50, 200, 0.6);
+            box-shadow: 0 0 5px rgba(100, 50, 200, 0.4);
         }
 
         .day-cell.l2 {
             background: rgba(150, 50, 255, 0.8);
+            box-shadow: 0 0 8px rgba(150, 50, 255, 0.6);
         }
 
         .day-cell.l3 {
             background: rgba(200, 100, 255, 1);
+            box-shadow: 0 0 10px rgba(200, 100, 255, 0.8);
         }
 
         .day-cell.l4 {
             background: rgba(0, 240, 255, 1);
+            box-shadow: 0 0 12px rgba(0, 240, 255, 1);
         }
 
         .stat-item {
@@ -402,6 +484,7 @@
             font-size: 1.8rem;
             color: #fff;
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .stat-item label {
@@ -414,6 +497,7 @@
             margin: 25px 0 10px 0;
             font-size: 0.85rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         ul {
@@ -445,6 +529,7 @@
             background: rgba(0, 240, 255, 0.05);
             border-radius: 8px;
             border: 1px solid rgba(0, 240, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .stat-value {
@@ -452,6 +537,7 @@
             color: #00f0ff;
             font-weight: bold;
             margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
         }
 
         .stat-label {
@@ -465,7 +551,7 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         iframe {
             width: 100%;
             height: 100%;
@@ -476,7 +562,8 @@
             position: absolute;
             bottom: 20px;
             right: 20px;
-            background: rgba(0, 25, 35, 0.9);
+            background: rgba(0, 25, 35, 0.8);
+            backdrop-filter: blur(10px);
             border: 1px solid #00f0ff;
             padding: 15px 20px;
             border-radius: 8px;
@@ -484,11 +571,13 @@
             z-index: 50;
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
+
         .get-yours-overlay p {
             margin: 0 0 10px 0;
             font-size: 0.9rem;
             color: #fff;
         }
+
         .get-yours-btn {
             display: inline-block;
             background: #00f0ff;
@@ -500,6 +589,7 @@
             font-size: 0.85rem;
             transition: 0.2s;
         }
+
         .get-yours-btn:hover {
             background: #fff;
             box-shadow: 0 0 10px #00f0ff;
@@ -555,10 +645,11 @@
             .consistency-stats-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             #heatmap-tab,
             #partners-tab {
-                justify-content: flex-start; /* Align top on mobile */
+                justify-content: flex-start;
+                /* Align top on mobile */
                 align-items: stretch;
                 padding: 15px;
                 padding-bottom: 100px;
@@ -568,23 +659,27 @@
             .stats-panel {
                 padding: 15px;
             }
-            
+
             .get-yours-overlay {
-                bottom: 100px; /* Push up above tab bar/nav */
-                left: 20px;    /* Center it */
+                bottom: 100px;
+                /* Push up above tab bar/nav */
+                left: 20px;
+                /* Center it */
                 right: 20px;
             }
         }
 
         /* FOOTER STYLES */
         .app-footer {
-            background: rgba(0, 25, 35, 0.9);
+            background: rgba(0, 25, 35, 0.8);
+            backdrop-filter: blur(10px);
             border-top: 1px solid rgba(0, 240, 255, 0.3);
             padding: 10px;
             text-align: center;
             font-size: 0.75rem;
-            color: #666;
-            flex-shrink: 0; /* Prevents it from being squashed */
+            color: #888;
+            flex-shrink: 0;
+            /* Prevents it from being squashed */
             z-index: 100;
         }
 
@@ -600,25 +695,26 @@
 
         .separator {
             margin: 0 5px;
-            color: #333;
+            color: #444;
         }
     </style>
 </head>
 
 <body>
+    <div id="stars-container"></div>
     <div id="login-screen">
         <div class="login-box">
             <h1>Focusmate Analytics</h1>
-            
+
             <div class="privacy-badge">
                 <span>🔒 100% Private & Client-Side</span>
             </div>
 
             <p>Analyze your productivity patterns from the last 12 months.</p>
-            
+
             <input type="password" id="api-key-input" placeholder="Paste your Focusmate API Key here">
             <button class="primary-btn" id="btn-generate">LOAD DATA</button>
-            
+
             <div class="disclaimer">
                 <p>Your API key is processed <strong>locally in your browser</strong>.</p>
                 <p>No data is ever sent to our servers.</p>
@@ -627,10 +723,11 @@
                     <span style="margin: 0 10px; color: #666;">|</span>
                     <a id="open-privacy">Privacy Policy</a>
                 </div>
-                
+
                 <div style="margin-top: 15px; font-size: 0.7rem; color:rgb(246, 5, 33);">
-                    Built by <a href="https://github.com/hubshashwat" target="_blank" style="color:rgb(246, 5, 33);">Shashwat</a> 
-                    &bull; 
+                    Built by <a href="https://github.com/hubshashwat" target="_blank"
+                        style="color:rgb(246, 5, 33);">Shashwat</a>
+                    &bull;
                     <a href="mailto:send2shashwat@gmail.com" style="color:rgb(246, 5, 33);">Feedback</a>
                 </div>
 
@@ -642,8 +739,9 @@
         <div class="modal-content">
             <button class="close-btn" id="close-privacy">&times;</button>
             <h2 style="color: #00f0ff; margin-bottom: 20px;">Your Data is Private</h2>
-            <p style="color: #fff; margin-bottom: 20px;">We believe your productivity data belongs to you. Here is how we guarantee your privacy:</p>
-            
+            <p style="color: #fff; margin-bottom: 20px;">We believe your productivity data belongs to you. Here is how
+                we guarantee your privacy:</p>
+
             <ul class="privacy-list">
                 <li>
                     <strong>Client-Side Only Execution</strong>
@@ -651,11 +749,13 @@
                 </li>
                 <li>
                     <strong>Direct Connection</strong>
-                    When you enter your API key, your browser connects <em>directly</em> to <code>api.focusmate.com</code>. There is no middleman server.
+                    When you enter your API key, your browser connects <em>directly</em> to
+                    <code>api.focusmate.com</code>. There is no middleman server.
                 </li>
                 <li>
                     <strong>Zero Data Retention</strong>
-                    We do not have a database. Once you close this tab, your API key and session data are wiped from memory.
+                    We do not have a database. Once you close this tab, your API key and session data are wiped from
+                    memory.
                 </li>
                 <li>
                     <strong>Open Source</strong>
@@ -664,7 +764,8 @@
             </ul>
 
             <div style="text-align: center; margin-top: 25px;">
-                <a href="https://github.com/hubshashwat/focusmatestats" target="_blank" style="font-weight: bold; font-size: 1.1rem;">View Source Code on GitHub</a>
+                <a href="https://github.com/hubshashwat/focusmatestats" target="_blank"
+                    style="font-weight: bold; font-size: 1.1rem;">View Source Code on GitHub</a>
             </div>
         </div>
     </div>
@@ -780,11 +881,13 @@
 
         <div id="globe-tab" class="tab-content">
             <iframe src="https://hubshashwat.github.io/focusmate/"></iframe>
-            
+
             <div class="get-yours-overlay">
                 <p>This is a demo visualization of Shashwat's data.</p>
-                <p style="color: #a0e0ff; font-size: 0.8rem; margin-bottom: 15px;">Want your own personal 3D globe with your real data?</p>
-                <a href="https://github.com/hubshashwat/focusmate" target="_blank" class="get-yours-btn">Clone & Run Locally</a>
+                <p style="color: #a0e0ff; font-size: 0.8rem; margin-bottom: 15px;">Want your own personal 3D globe with
+                    your real data?</p>
+                <a href="https://github.com/hubshashwat/focusmate" target="_blank" class="get-yours-btn">Clone & Run
+                    Locally</a>
             </div>
         </div>
 
@@ -1008,20 +1111,20 @@
 
             // --- FIXED NULL CHECKS HERE ---
             const elName = document.getElementById('user-name');
-            if(elName) elName.textContent = myName;
+            if (elName) elName.textContent = myName;
 
             const elTotal = document.getElementById('profile-total-sessions');
-            if(elTotal) elTotal.textContent = totalValidSessions;
+            if (elTotal) elTotal.textContent = totalValidSessions;
 
             const elUnique = document.getElementById('profile-total-partners');
-            if(elUnique) elUnique.textContent = Object.keys(partnerData).length;
+            if (elUnique) elUnique.textContent = Object.keys(partnerData).length;
 
             const elFav = document.getElementById('profile-favorite-sessions');
-            if(elFav) elFav.textContent = favoriteSessions;
+            if (elFav) elFav.textContent = favoriteSessions;
 
             const partnersList = document.getElementById('top-partners-list');
             // Ensure list exists before writing
-            if(partnersList) {
+            if (partnersList) {
                 partnersList.innerHTML = '<li style="padding: 20px; text-align: center; color: #a0e0ff;">Loading top partners...</li>';
 
                 if (sortedPartners.length > 0) {

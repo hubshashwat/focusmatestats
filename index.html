@@ -1299,11 +1299,20 @@
                 options: { responsive: true, maintainAspectRatio: false, scales: { r: { grid: { color: 'rgba(0, 240, 255, 0.1)' }, pointLabels: { color: '#a0e0ff' } } } }
             });
 
+            const sortedHours = Object.keys(data.hourCounts).sort((a, b) => parseInt(a) - parseInt(b));
+            const hourLabels = sortedHours.map(h => {
+                const hour = parseInt(h);
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const h12 = hour % 12 || 12;
+                return `${h12} ${ampm}`;
+            });
+            const hourValues = sortedHours.map(h => data.hourCounts[h]);
+
             new Chart(document.getElementById('chart-by-hour'), {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(data.hourCounts).sort((a, b) => a - b),
-                    datasets: [{ label: 'Sessions', data: Object.values(data.hourCounts), backgroundColor: '#80d0ff' }]
+                    labels: hourLabels,
+                    datasets: [{ label: 'Sessions', data: hourValues, backgroundColor: '#80d0ff' }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
             });

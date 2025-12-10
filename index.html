@@ -1281,11 +1281,51 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
             });
 
-            new Chart(document.getElementById('chart-by-week'), {
+            const ctxWeek = document.getElementById('chart-by-week').getContext('2d');
+            const gradientWeek = ctxWeek.createLinearGradient(0, 0, 0, 400);
+            gradientWeek.addColorStop(0, 'rgba(0, 240, 255, 0.5)');
+            gradientWeek.addColorStop(1, 'rgba(0, 240, 255, 0)');
+
+            const sortedWeeks = Object.keys(data.weekCounts).sort();
+
+            function getWeekRange(weekKey) {
+                const [year, week] = weekKey.split('-W').map(Number);
+                const simple = new Date(year, 0, 1 + (week - 1) * 7);
+                const dow = simple.getDay();
+                const ISOweekStart = simple;
+                if (dow <= 4)
+                    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+                else
+                    ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+
+                const startMonth = ISOweekStart.toLocaleDateString('en-US', { month: 'short' });
+                const startDay = ISOweekStart.getDate();
+
+                const endWeek = new Date(ISOweekStart);
+                endWeek.setDate(endWeek.getDate() + 6);
+                const endDay = endWeek.getDate();
+
+                return `${startMonth} ${startDay}-${endDay}`;
+            }
+
+            const weekLabels = sortedWeeks.map(getWeekRange);
+            const weekValues = sortedWeeks.map(k => data.weekCounts[k]);
+
+            new Chart(ctxWeek, {
                 type: 'line',
                 data: {
-                    labels: Object.keys(data.weekCounts).sort(),
-                    datasets: [{ label: 'Sessions', data: Object.values(data.weekCounts), borderColor: '#a0e0ff', tension: 0.4 }]
+                    labels: weekLabels,
+                    datasets: [{
+                        label: 'Sessions',
+                        data: weekValues,
+                        borderColor: '#00f0ff',
+                        backgroundColor: gradientWeek,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#000',
+                        pointBorderColor: '#00f0ff',
+                        pointBorderWidth: 2
+                    }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } }
             });
